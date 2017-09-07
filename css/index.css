@@ -2,3 +2,12 @@
 .addButton{
     margin-top: 15px;
 }
+.tableList{
+    table-layout: fixed;
+}
+.tableList tr th{
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: keep-all;
+}
