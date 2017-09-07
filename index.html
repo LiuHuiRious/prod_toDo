@@ -31,6 +31,13 @@
                     }
                 }
             }
+
+            $scope.hideList = function () {
+                if($scope.hideFinishedList){
+                    return {status:false}
+                }
+                else return {}
+            }
         })
     </script>
     <script src="js/controllers/timeCtrl.js"></script>
@@ -41,18 +48,21 @@
     <p>{{getTime()}}</p>
 </div>
 <div class="container">
+    <div class="form-group text-center">
+        <label>隐藏完成的任务 <input type="checkbox" ng-model="hideFinishedList"></label>
+    </div>
     <div class="row">
         <div class="col-sm-6 col-sm-offset-3">
             <table class="table table-responsive tableList" ng-show="dataList.length>0">
                 <thead>
                 <tr>
-                    <th>任务</th>
-                    <th>描述</th>
-                    <th>状态</th>
+                    <th><h4>任务</h4></th>
+                    <th><h4>描述</h4></th>
+                    <th><h4>状态</h4></th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat="item in dataList">
+                <tr ng-repeat="item in dataList | filter:hideList()">
                     <th>{{item.content}}</th>
                     <th>{{item.description}}</th>
                     <th><input type="checkbox" ng-model="item.status"></th>
