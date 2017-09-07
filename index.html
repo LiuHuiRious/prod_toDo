@@ -12,11 +12,13 @@
     <script>
         angular.module('toDoList',[]).controller('defaultCtrl', function ($scope) {
             $scope.dataList = [];
-
-            $scope.newList = null;
+            $scope.hideAddList = false;//是否隐藏添加的输入框组
+            $scope.newList = null;//存储新建立的任务
 
             $scope.addList = function (newList) {
                 var hasTheSame = false;
+                $scope.hideAddList = false;
+                $scope.hideCancelButton = false;
                 if(newList && angular.isString(newList.content) && angular.isString(newList.description)){
                     for(var i=0;i<$scope.dataList.length;i++){
                         if(newList.content == $scope.dataList[i].content){
@@ -38,6 +40,11 @@
                 }
                 else return {}
             }
+
+            $scope.hideAddListTable = function () {
+                $scope.hideAddList = true;
+                $scope.hideCancelButton = true;
+            }
         })
     </script>
     <script src="js/controllers/timeCtrl.js"></script>
@@ -53,33 +60,40 @@
     </div>
     <div class="row">
         <div class="col-sm-6 col-sm-offset-3">
-            <table class="table table-responsive tableList" ng-show="dataList.length>0">
-                <thead>
-                <tr>
-                    <th><h4>任务</h4></th>
-                    <th><h4>描述</h4></th>
-                    <th><h4>状态</h4></th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr ng-repeat="item in dataList | filter:hideList()">
-                    <th>{{item.content}}</th>
-                    <th>{{item.description}}</th>
-                    <th><input type="checkbox" ng-model="item.status"></th>
-                </tr>
-                </tbody>
-            </table>
+            <div class="panel panel-info" ng-show="dataList.length>0">
+                <div class="panel-heading">
+                    <table class="table table-responsive tableList">
+                        <thead>
+                        <tr>
+                            <th><h4>任务</h4></th>
+                            <th><h4>描述</h4></th>
+                            <th><h4>状态</h4></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="item in dataList | filter:hideList()">
+                            <th>{{item.content}}</th>
+                            <th>{{item.description}}</th>
+                            <th><input type="checkbox" ng-model="item.status"></th>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
             <div class="panel panel-primary text-center" ng-hide="dataList.length>0">
                 <div class="panel-body">
                     你还没有任务哦！^ _ ^马上添加吧!
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group" ng-hide="hideAddList">
                 <div class="row">
                     <div class="col-sm-6"><label class="center-block">任务:<input type="text" class="form-control" ng-model="newList.content"></label></div>
                     <div class="col-sm-6"><label class="center-block">描述:<input type="text" class="form-control" ng-model="newList.description"></label></div>
                 </div>
-                <button class="btn btn-primary center-block addButton" ng-click="addList(newList)">添加+</button>
+            </div>
+            <div class="text-center">
+                <button class="btn btn-primary addButton" ng-click="addList(newList)">添加+</button>
+                <button class="btn btn-danger cancelButton" ng-show="dataList.length>0 && !hideCancelButton" ng-click="hideAddListTable()">取消<span>&times;</span></button>
             </div>
         </div>
     </div>

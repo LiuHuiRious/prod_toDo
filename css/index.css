@@ -1,5 +1,5 @@
 
-.addButton{
+.addButton,.cancelButton{
     margin-top: 15px;
 }
 .tableList{
@@ -10,4 +10,5 @@
     overflow: hidden;
     text-overflow: ellipsis;
     word-break: keep-all;
+    text-align: center;
 }
