@@ -5,12 +5,32 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>toDoList</title>
     <link rel="stylesheet" href="js/lib/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/index.css">
     <script src="js/lib/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="js/lib/angular/angular.min.js"></script>
     <script src="js/lib/angular-route/angular-route.min.js"></script>
     <script>
         angular.module('toDoList',[]).controller('defaultCtrl', function ($scope) {
             $scope.dataList = [];
+
+            $scope.newList = null;
+
+            $scope.addList = function (newList) {
+                var hasTheSame = false;
+                if(newList && angular.isString(newList.content) && angular.isString(newList.description)){
+                    for(var i=0;i<$scope.dataList.length;i++){
+                        if(newList.content == $scope.dataList[i].content){
+                            hasTheSame = true;
+                            alert('对不起，这个任务已经存在！')
+                        }
+                    }
+                    if(!hasTheSame){
+                        newList.status = false;
+                        $scope.dataList.push(newList);
+                        $scope.newList = null;
+                    }
+                }
+            }
         })
     </script>
     <script src="js/controllers/timeCtrl.js"></script>
@@ -23,16 +43,33 @@
 <div class="container">
     <div class="row">
         <div class="col-sm-6 col-sm-offset-3">
-            <div class="table" ng-show="data.length>0">
-                ss
-            </div>
-            <div class="panel panel-primary text-center" ng-hide="data.length>0">
+            <table class="table" ng-show="dataList.length>0">
+                <thead>
+                <tr>
+                    <th>任务</th>
+                    <th>描述</th>
+                    <th>状态</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="item in dataList">
+                    <th>{{item.content}}</th>
+                    <th>{{item.description}}</th>
+                    <th><input type="checkbox" ng-model="item.status"></th>
+                </tr>
+                </tbody>
+            </table>
+            <div class="panel panel-primary text-center" ng-hide="dataList.length>0">
                 <div class="panel-body">
                     你还没有任务哦！^ _ ^马上添加吧!
                 </div>
             </div>
             <div class="form-group">
-                <button class="btn btn-primary btn-block">添加+</button>
+                <div class="row">
+                    <div class="col-sm-6"><label class="center-block">任务:<input type="text" class="form-control" ng-model="newList.content"></label></div>
+                    <div class="col-sm-6"><label class="center-block">描述:<input type="text" class="form-control" ng-model="newList.description"></label></div>
+                </div>
+                <button class="btn btn-primary center-block addButton" ng-click="addList(newList)">添加+</button>
             </div>
         </div>
     </div>
