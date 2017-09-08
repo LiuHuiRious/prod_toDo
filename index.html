@@ -9,42 +9,52 @@
     <script src="js/lib/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="js/lib/angular/angular.min.js"></script>
     <script src="js/lib/angular-route/angular-route.min.js"></script>
+    <script src="js/lib/angular-resource/angular-resource.js"></script>
     <script>
-        angular.module('toDoList',[]).controller('defaultCtrl', function ($scope) {
-            $scope.dataList = [];
-            $scope.hideAddList = false;//是否隐藏添加的输入框组
-            $scope.newList = null;//存储新建立的任务
+        angular.module('toDoList',['ngResource']).constant('dataUrl','http://www.liuhui.space:5500/my-todolist/')
+                .controller('defaultCtrl', function ($scope,$resource,dataUrl) {
+                    $scope.dataResource = $resource(dataUrl + ':id',{id:'@id'});
 
-            $scope.addList = function (newList) {
-                var hasTheSame = false;
-                $scope.hideAddList = false;
-                $scope.hideCancelButton = false;
-                if(newList && angular.isString(newList.content) && angular.isString(newList.description)){
-                    for(var i=0;i<$scope.dataList.length;i++){
-                        if(newList.content == $scope.dataList[i].content){
-                            hasTheSame = true;
-                            alert('对不起，这个任务已经存在！')
+                    $scope.getData = function () {
+                        $scope.dataList = $scope.dataResource.query();
+                    }
+
+                    $scope.hideAddList = false;//是否隐藏添加的输入框组
+                    $scope.newList = null;//存储新建立的任务
+
+                    $scope.addList = function (newList) {
+                        var hasTheSame = false;
+                        $scope.hideAddList = false;
+                        $scope.hideCancelButton = false;
+                        if(newList && angular.isString(newList.content) && angular.isString(newList.description)){
+                            for(var i=0;i<$scope.dataList.length;i++){
+                                if(newList.content == $scope.dataList[i].content){
+                                    hasTheSame = true;
+                                    alert('对不起，这个任务已经存在！')
+                                }
+                            }
+                            if(!hasTheSame){
+                                newList.status = false;
+                                new $scope.dataResource(newList).$save().then(function (brandNewData) {
+                                    $scope.dataList.push(brandNewData);
+                                    $scope.newList = null;
+                                })
+                            }
                         }
                     }
-                    if(!hasTheSame){
-                        newList.status = false;
-                        $scope.dataList.push(newList);
-                        $scope.newList = null;
+
+                    $scope.hideList = function () {
+                        if($scope.hideFinishedList){
+                            return {status:false}
+                        }
+                        else return {}
                     }
-                }
-            }
 
-            $scope.hideList = function () {
-                if($scope.hideFinishedList){
-                    return {status:false}
-                }
-                else return {}
-            }
-
-            $scope.hideAddListTable = function () {
-                $scope.hideAddList = true;
-                $scope.hideCancelButton = true;
-            }
+                    $scope.hideAddListTable = function () {
+                        $scope.hideAddList = true;
+                        $scope.hideCancelButton = true;
+                    }
+                    $scope.getData();
         })
     </script>
     <script src="js/controllers/timeCtrl.js"></script>
