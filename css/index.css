@@ -1,6 +1,11 @@
-
+.container{
+    padding: 15px;
+}
 .addButton,.cancelButton{
     margin-top: 15px;
+}
+.smallTool{
+    margin-bottom: 15px;
 }
 .tableList{
     table-layout: fixed;

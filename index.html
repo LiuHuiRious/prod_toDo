@@ -6,7 +6,6 @@
     <title>toDoList</title>
     <link rel="stylesheet" href="js/lib/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/index.css">
-    <script src="js/lib/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="js/lib/angular/angular.min.js"></script>
     <script src="js/lib/angular-route/angular-route.min.js"></script>
     <script src="js/lib/angular-resource/angular-resource.js"></script>
@@ -65,37 +64,33 @@
     </script>
     <script src="js/controllers/timeCtrl.js"></script>
 </head>
-<body ng-controller="defaultCtrl">
+<body ng-controller="defaultCtrl" class="bg-info">
 <div class="page-header text-center"  ng-controller="timeCtrl">
     <h2>ToDo</h2>
     <p>{{getTime()}}</p>
 </div>
 <div class="container">
-    <div class="form-group text-center">
+    <div class="form-group text-center smallTool">
         <span class="badge"><label>隐藏完成的任务 <input type="checkbox" ng-model="hideFinishedList"></label></span>
+    </div>
     <div class="row">
         <div class="col-sm-6 col-sm-offset-3">
-            <div class="panel panel-info" ng-show="dataList.length>0">
-                <div class="panel-heading">
-                <table class="table table-responsive tableList">
-                    <thead>
+            <div class="jumbotron" ng-show="dataList.length>0">
+
+                <table class="table table-responsive tableList text-center">
                     <tr>
                         <th><h4>任务</h4></th>
                         <th><h4>描述</h4></th>
                         <th><h4>状态</h4></th>
                         <th><h4>编辑</h4></th>
                     </tr>
-                    </thead>
-                    <tbody>
                     <tr ng-repeat="item in dataList | filter:hideList()" ng-show="item">
-                        <th>{{item.content}}</th>
-                        <th>{{item.description}}</th>
-                        <th><input type="checkbox" ng-model="item.status"></th>
-                        <th><button class="btn btn-default btn-sm" ng-click="deleteList(item)">删除</button></th>
+                        <td>{{item.content}}</td>
+                        <td>{{item.description}}</td>
+                        <td><input type="checkbox" ng-model="item.status"></td>
+                        <td><button class="btn btn-default btn-sm" ng-click="deleteList(item)">删除</button></td>
                     </tr>
-                    </tbody>
                 </table>
-            </div>
             </div>
             <div class="panel panel-primary text-center" ng-hide="dataList.length>0">
                 <div class="panel-body">
@@ -115,6 +110,5 @@
         </div>
     </div>
 </div>
-<ng-include></ng-include>
 </body>
 </html>
