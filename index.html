@@ -43,6 +43,12 @@
                         }
                     }
 
+                    $scope.deleteList = function (data) {
+                        data.$delete().then(function () {
+                            $scope.dataList.splice($scope.dataList.indexOf(data),1);
+                        })
+                    }
+
                     $scope.hideList = function () {
                         if($scope.hideFinishedList){
                             return {status:false}
@@ -66,29 +72,30 @@
 </div>
 <div class="container">
     <div class="form-group text-center">
-        <label>隐藏完成的任务 <input type="checkbox" ng-model="hideFinishedList"></label>
-    </div>
+        <span class="badge"><label>隐藏完成的任务 <input type="checkbox" ng-model="hideFinishedList"></label></span>
     <div class="row">
         <div class="col-sm-6 col-sm-offset-3">
             <div class="panel panel-info" ng-show="dataList.length>0">
                 <div class="panel-heading">
-                    <table class="table table-responsive tableList">
-                        <thead>
-                        <tr>
-                            <th><h4>任务</h4></th>
-                            <th><h4>描述</h4></th>
-                            <th><h4>状态</h4></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr ng-repeat="item in dataList | filter:hideList()">
-                            <th>{{item.content}}</th>
-                            <th>{{item.description}}</th>
-                            <th><input type="checkbox" ng-model="item.status"></th>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
+                <table class="table table-responsive tableList">
+                    <thead>
+                    <tr>
+                        <th><h4>任务</h4></th>
+                        <th><h4>描述</h4></th>
+                        <th><h4>状态</h4></th>
+                        <th><h4>编辑</h4></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="item in dataList | filter:hideList()" ng-show="item">
+                        <th>{{item.content}}</th>
+                        <th>{{item.description}}</th>
+                        <th><input type="checkbox" ng-model="item.status"></th>
+                        <th><button class="btn btn-default btn-sm" ng-click="deleteList(item)">删除</button></th>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
             </div>
             <div class="panel panel-primary text-center" ng-hide="dataList.length>0">
                 <div class="panel-body">
